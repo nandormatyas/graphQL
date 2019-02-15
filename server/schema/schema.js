@@ -5,7 +5,8 @@ const {
   GraphQLString, 
   GraphQLSchema,
   GraphQLID,
-  GraphQLInt
+  GraphQLInt,
+  GraphQLList
 } = graphql;
 
 const BookType = new GraphQLObjectType({
@@ -29,7 +30,13 @@ const AuthorType = new GraphQLObjectType({
   fields: () => ({
     id: { type: GraphQLID },
     name: { type: GraphQLString },
-    age: { type: GraphQLInt }
+    age: { type: GraphQLInt },
+    books: {
+      type: new GraphQLList(BookType),
+      resolve(parent, args){
+        return 1;
+      }
+    }
   })
 });
 
@@ -40,15 +47,26 @@ const RootQuery = new GraphQLObjectType({
       type: BookType,
       args: { id: { type:GraphQLID } },
       resolve(parent, args){
-        //code to get data from db
-        return 1
+        return 1;
       }
     },
     author: {
       type: AuthorType,
       args: { id: { type:GraphQLID } },
       resolve(parent, args){
-        return 1
+        return 1;
+      }
+    },
+    books: {
+      type: new GraphQLList(BookType),
+      resolve(parent, args){
+        return books;
+      }
+    },
+    authors: {
+      type: new GraphQLList(AuthorType),
+      resolve(parent, args){
+        return authors;
       }
     }
   }
